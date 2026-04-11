@@ -5,7 +5,7 @@ namespace App\Services\Ai\Tools;
 use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\Payment;
-use Carbon\Carbon;
+use App\Services\Ai\Tools\Concerns\ResolvesPeriod;
 
 /**
  * Aggregate stats for the current company over a time window.
@@ -15,6 +15,14 @@ use Carbon\Carbon;
  */
 class GetCompanyStatsTool extends AiTool
 {
+    use ResolvesPeriod;
+
+    /**
+     * Bounded periods only — stats over `all_time` is almost always useless
+     * (collapses every record into one giant bucket), so we don't offer it
+     * here. The ranking tools do expose `all_time` because ranking by totals
+     * across the full history is a meaningful question.
+     */
     private const PERIODS = [
         'today',
         'this_week',
@@ -57,6 +65,8 @@ class GetCompanyStatsTool extends AiTool
             return ['error' => 'invalid_period', 'valid' => self::PERIODS];
         }
 
+        // Stats are always date-scoped (the enum above excludes `all_time`),
+        // so rangeFor() is guaranteed to return a non-null pair here.
         [$start, $end] = $this->rangeFor($period);
 
         $invoiceCount = Invoice::query()
@@ -97,29 +107,5 @@ class GetCompanyStatsTool extends AiTool
             'payments' => ['count' => $paymentCount, 'total' => $paymentTotal],
             'expenses' => ['count' => $expenseCount, 'total' => $expenseTotal],
         ];
-    }
-
-    /**
-     * @return array{0: Carbon, 1: Carbon}
-     */
-    private function rangeFor(string $period): array
-    {
-        $now = Carbon::now();
-
-        return match ($period) {
-            'today' => [$now->copy()->startOfDay(), $now->copy()->endOfDay()],
-            'this_week' => [$now->copy()->startOfWeek(), $now->copy()->endOfWeek()],
-            'this_month' => [$now->copy()->startOfMonth(), $now->copy()->endOfMonth()],
-            'last_month' => [
-                $now->copy()->subMonthNoOverflow()->startOfMonth(),
-                $now->copy()->subMonthNoOverflow()->endOfMonth(),
-            ],
-            'this_quarter' => [$now->copy()->startOfQuarter(), $now->copy()->endOfQuarter()],
-            'this_year' => [$now->copy()->startOfYear(), $now->copy()->endOfYear()],
-            'last_year' => [
-                $now->copy()->subYearNoOverflow()->startOfYear(),
-                $now->copy()->subYearNoOverflow()->endOfYear(),
-            ],
-        };
     }
 }

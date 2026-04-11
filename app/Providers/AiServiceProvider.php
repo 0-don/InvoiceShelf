@@ -9,6 +9,9 @@ use App\Services\Ai\Tools\GetInvoiceTool;
 use App\Services\Ai\Tools\ListExpenseCategoriesTool;
 use App\Services\Ai\Tools\ListOverdueInvoicesTool;
 use App\Services\Ai\Tools\ListRecentPaymentsTool;
+use App\Services\Ai\Tools\RankExpenseCategoriesTool;
+use App\Services\Ai\Tools\RankTopCustomersTool;
+use App\Services\Ai\Tools\RankTopItemsTool;
 use App\Services\Ai\Tools\SearchCustomersTool;
 use App\Services\Ai\Tools\SearchInvoicesTool;
 use App\Services\Ai\Tools\SearchItemsTool;
@@ -40,6 +43,12 @@ class AiServiceProvider extends ServiceProvider
             $registry->register(new SearchItemsTool);
             $registry->register(new ListExpenseCategoriesTool);
             $registry->register(new GetCompanyStatsTool);
+
+            // Ranking tools — group-by aggregates the individual-record
+            // tools above can't express.
+            $registry->register(new RankTopCustomersTool);
+            $registry->register(new RankTopItemsTool);
+            $registry->register(new RankExpenseCategoriesTool);
 
             return $registry;
         });
