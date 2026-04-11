@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { AiChatMessage } from '@/scripts/types/ai-config'
+import { renderMarkdown } from '@/scripts/utils/markdown'
 
 const props = defineProps<{
   message: AiChatMessage
 }>()
 
 const isUser = computed(() => props.message.role === 'user')
+
+// Assistant messages get rendered as markdown → sanitized HTML so GFM
+// features (code blocks, lists, tables, inline formatting) display as
+// the model intended. User messages stay as plain text because the
+// user typed them verbatim and markdown syntax would be surprising.
+const renderedHtml = computed(() =>
+  isUser.value ? '' : renderMarkdown(props.message.content ?? ''),
+)
 </script>
 
 <template>
@@ -22,10 +31,16 @@ const isUser = computed(() => props.message.role === 'user')
           : 'bg-surface-tertiary text-body'
       "
     >
-      <!-- Plain text rendering for v1 — markdown support can ship later. -->
-      <p class="whitespace-pre-wrap break-words">
+      <p v-if="isUser" class="whitespace-pre-wrap break-words">
         {{ message.content ?? '' }}
       </p>
+      <!-- Assistant output is sanitized via DOMPurify in renderMarkdown
+           before it reaches v-html — see resources/scripts/utils/markdown.ts. -->
+      <div
+        v-else
+        class="prose prose-sm max-w-none break-words"
+        v-html="renderedHtml"
+      />
     </div>
   </div>
 </template>
