@@ -4,6 +4,7 @@ namespace App\Services\Ai;
 
 use App\Services\AiConfigurationService;
 use App\Support\Ai\AiException;
+use App\Support\Ai\PromptLoader;
 
 /**
  * Stateless one-shot text generation for the WYSIWYG popup.
@@ -67,13 +68,14 @@ class AiTextGenerationService
      * Keep the framing terse — text-generation output should not be padded
      * with "Here is the text you requested:" preambles. The instruction is
      * always placed last so the model gives it the most weight.
+     *
+     * The static preamble lives at resources/ai/prompts/text-generation.md.
+     * The conditional context + instruction appending stays here because it
+     * has different structure depending on whether `context` is present.
      */
     protected function buildPrompt(string $prompt, ?string $context): string
     {
-        $system = "You are a helpful writing assistant embedded in an invoicing application. Generate text based on the user's instruction. Rules:\n"
-            .'- Return only the requested text. No preamble, no explanation, no markdown code fences.'."\n"
-            .'- Match the tone and language implied by the instruction.'."\n"
-            .'- Be concise unless explicitly asked for length.';
+        $system = PromptLoader::load('text-generation');
 
         if ($context !== null && trim($context) !== '') {
             return $system."\n\n"

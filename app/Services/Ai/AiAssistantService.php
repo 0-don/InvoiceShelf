@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\AiConfigurationService;
 use App\Support\Ai\AiChatResponse;
 use App\Support\Ai\AiException;
+use App\Support\Ai\PromptLoader;
 use Carbon\Carbon;
 use InvalidArgumentException;
 use Throwable;
@@ -229,29 +230,21 @@ class AiAssistantService
 
     /**
      * Compose the system prompt with company context.
+     *
+     * The template itself lives at resources/ai/prompts/chat-system.md so
+     * it can be edited without touching this class. See PromptLoader for
+     * the substitution rules.
      */
     protected function buildSystemPrompt(AiConversation $conversation): string
     {
         $company = Company::find($conversation->company_id);
         $user = User::find($conversation->user_id);
 
-        $companyName = $company?->name ?? 'this company';
-        $userName = $user?->name ?? 'the user';
-        $today = Carbon::now()->toDateString();
-
-        return <<<PROMPT
-You are the InvoiceShelf assistant, embedded in an invoicing application. You help {$userName} answer questions about **{$companyName}**'s data: invoices, estimates, payments, expenses, customers, and items.
-
-Today is {$today}.
-
-Rules:
-- Use the provided tools whenever the user asks about specific records. Do not invent data.
-- Only answer questions about {$companyName}'s data. If asked about another company or unrelated topics, politely decline.
-- You cannot modify data — you are read-only. If the user asks you to create/update/delete something, explain that they need to do it in the UI.
-- Be concise. Format responses in Markdown (headings, **bold**, bullet lists, tables when comparing multiple records).
-- Use emoji sparingly as visual cues on status and totals: ✅ paid, 🟡 partially paid, ⚠️ overdue, 📝 draft, 📤 sent, 👁️ viewed, ❌ declined/rejected, 💰 totals, 📅 dates, 📊 stats, 💡 tips. One emoji per bullet is plenty — don't decorate every sentence.
-- If a tool returns an error or empty result, say so plainly and suggest a next step.
-PROMPT;
+        return PromptLoader::load('chat-system', [
+            'user_name' => $user?->name ?? 'the user',
+            'company_name' => $company?->name ?? 'this company',
+            'today' => Carbon::now()->toDateString(),
+        ]);
     }
 
     /**
