@@ -74,12 +74,15 @@ class DriverRegistryProvider extends ServiceProvider
             'default_base_url' => 'https://openrouter.ai/api/v1',
             'supported_roles' => ['chat', 'text_generation'],
             'suggested_models' => [
-                ['value' => 'openai/gpt-4o', 'label' => 'OpenAI GPT-4o'],
-                ['value' => 'openai/gpt-4o-mini', 'label' => 'OpenAI GPT-4o mini'],
-                ['value' => 'anthropic/claude-3.5-sonnet', 'label' => 'Anthropic Claude 3.5 Sonnet'],
-                ['value' => 'anthropic/claude-3.5-haiku', 'label' => 'Anthropic Claude 3.5 Haiku'],
-                ['value' => 'google/gemini-pro-1.5', 'label' => 'Google Gemini Pro 1.5'],
-                ['value' => 'meta-llama/llama-3.3-70b-instruct', 'label' => 'Meta Llama 3.3 70B'],
+                ['value' => 'anthropic/claude-sonnet-4.6', 'label' => 'Anthropic Claude Sonnet 4.6'],
+                ['value' => 'anthropic/claude-haiku-4.5', 'label' => 'Anthropic Claude Haiku 4.5'],
+                ['value' => 'anthropic/claude-opus-4.6', 'label' => 'Anthropic Claude Opus 4.6'],
+                ['value' => 'openai/gpt-5.4', 'label' => 'OpenAI GPT-5.4'],
+                ['value' => 'openai/gpt-5.4-mini', 'label' => 'OpenAI GPT-5.4 mini'],
+                ['value' => 'google/gemini-3.1-pro-preview', 'label' => 'Google Gemini 3.1 Pro (preview)'],
+                ['value' => 'google/gemini-3.1-flash-lite-preview', 'label' => 'Google Gemini 3.1 Flash Lite (preview)'],
+                ['value' => 'z-ai/glm-5.1', 'label' => 'Z.AI GLM 5.1'],
+                ['value' => 'z-ai/glm-4.7-flash', 'label' => 'Z.AI GLM 4.7 Flash'],
             ],
             'config_fields' => [
                 [

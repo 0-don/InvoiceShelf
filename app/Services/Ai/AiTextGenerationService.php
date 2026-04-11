@@ -18,8 +18,8 @@ use App\Support\Ai\AiException;
  *   - ai_text_generation_model picks which model to use
  *
  * That means an instance can use a cheap fast model for one-shot writing
- * (openai/gpt-4o-mini) while pointing chat at a smarter model
- * (openai/gpt-4o) without config gymnastics.
+ * (anthropic/claude-haiku-4.5) while pointing chat at a smarter model
+ * (anthropic/claude-sonnet-4.6) without config gymnastics.
  */
 class AiTextGenerationService
 {

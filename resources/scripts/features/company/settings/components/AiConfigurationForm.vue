@@ -95,9 +95,9 @@ function createDefaults(): AiConfig {
     ai_api_key: '',
     ai_base_url: '',
     ai_chat_enabled: 'NO',
-    ai_chat_model: 'openai/gpt-4o',
+    ai_chat_model: 'anthropic/claude-sonnet-4.6',
     ai_text_generation_enabled: 'NO',
-    ai_text_generation_model: 'openai/gpt-4o-mini',
+    ai_text_generation_model: 'anthropic/claude-haiku-4.5',
   }
 }
 
