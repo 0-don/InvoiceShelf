@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support;
+namespace App\Support\Media;
 
 use App\Models\Estimate;
 use App\Models\Invoice;

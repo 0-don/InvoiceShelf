@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Setup;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Support\InstallWizardAuth;
+use App\Support\Setup\InstallWizardAuth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

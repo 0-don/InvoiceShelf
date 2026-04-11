@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support;
+namespace App\Support\Bouncer;
 
 use Silber\Bouncer\Database\Scope\Scope;
 
