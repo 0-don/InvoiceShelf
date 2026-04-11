@@ -45,7 +45,7 @@ return [
     * Marketplace and updater base URL.
     *
     * The marketplace client (App\Services\Module\ModuleInstaller) and the
-    * updater (App\Services\Update\Updater) both build their HTTP client base
+    * updater (App\Support\Update\Updater) both build their HTTP client base
     * URI from this value via App\Traits\SiteApi::getRemote(). Override via
     * INVOICESHELF_BASE_URL in .env to point a self-hosted instance or local
     * dev environment at a non-production marketplace (e.g. a local checkout

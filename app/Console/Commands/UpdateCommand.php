@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Services\Update\Updater;
+use App\Support\Update\Updater;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 

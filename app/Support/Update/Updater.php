@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Update;
+namespace App\Support\Update;
 
 use App\Events\UpdateFinished;
 use App\Models\Setting;
