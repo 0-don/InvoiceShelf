@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Module;
+namespace App\Support\Module;
 
 use App\Events\ModuleEnabledEvent;
 use App\Events\ModuleInstalledEvent;
@@ -13,7 +13,6 @@ use GuzzleHttp\Exception\RequestException;
 use Nwidart\Modules\Facades\Module;
 use ZipArchive;
 
-// Implementation taken from Akaunting - https://github.com/akaunting/akaunting
 class ModuleInstaller
 {
     use SiteApi;

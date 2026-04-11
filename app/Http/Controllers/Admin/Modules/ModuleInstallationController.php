@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Modules;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UnzipUpdateRequest;
 use App\Http\Requests\UploadModuleRequest;
-use App\Services\Module\ModuleInstaller;
+use App\Support\Module\ModuleInstaller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

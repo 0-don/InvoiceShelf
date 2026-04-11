@@ -7,7 +7,7 @@ use App\Events\ModuleEnabledEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ModuleResource;
 use App\Models\Module as ModelsModule;
-use App\Services\Module\ModuleInstaller;
+use App\Support\Module\ModuleInstaller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Nwidart\Modules\Facades\Module;
