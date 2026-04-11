@@ -46,6 +46,15 @@ class SettingsPolicy
         return false;
     }
 
+    public function manageAiConfig(User $user)
+    {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function managePDFConfig(User $user)
     {
         if ($user->isSuperAdmin()) {

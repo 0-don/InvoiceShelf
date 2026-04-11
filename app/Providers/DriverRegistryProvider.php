@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Support\Ai\OpenRouterDriver;
 use App\Support\ExchangeRate\CurrencyConverterDriver;
 use App\Support\ExchangeRate\CurrencyFreakDriver;
 use App\Support\ExchangeRate\CurrencyLayerDriver;
@@ -14,6 +15,7 @@ class DriverRegistryProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerExchangeRateDrivers();
+        $this->registerAiDrivers();
     }
 
     protected function registerExchangeRateDrivers(): void
@@ -60,6 +62,33 @@ class DriverRegistryProvider extends ServiceProvider
             'class' => OpenExchangeRateDriver::class,
             'label' => 'settings.exchange_rate.open_exchange_rate',
             'website' => 'https://openexchangerates.org',
+        ]);
+    }
+
+    protected function registerAiDrivers(): void
+    {
+        Registry::registerAiDriver('openrouter', [
+            'class' => OpenRouterDriver::class,
+            'label' => 'settings.ai.openrouter',
+            'website' => 'https://openrouter.ai',
+            'default_base_url' => 'https://openrouter.ai/api/v1',
+            'supported_roles' => ['chat', 'text_generation'],
+            'suggested_models' => [
+                ['value' => 'openai/gpt-4o', 'label' => 'OpenAI GPT-4o'],
+                ['value' => 'openai/gpt-4o-mini', 'label' => 'OpenAI GPT-4o mini'],
+                ['value' => 'anthropic/claude-3.5-sonnet', 'label' => 'Anthropic Claude 3.5 Sonnet'],
+                ['value' => 'anthropic/claude-3.5-haiku', 'label' => 'Anthropic Claude 3.5 Haiku'],
+                ['value' => 'google/gemini-pro-1.5', 'label' => 'Google Gemini Pro 1.5'],
+                ['value' => 'meta-llama/llama-3.3-70b-instruct', 'label' => 'Meta Llama 3.3 70B'],
+            ],
+            'config_fields' => [
+                [
+                    'key' => 'base_url',
+                    'type' => 'text',
+                    'label' => 'settings.ai.base_url',
+                    'default' => 'https://openrouter.ai/api/v1',
+                ],
+            ],
         ]);
     }
 }

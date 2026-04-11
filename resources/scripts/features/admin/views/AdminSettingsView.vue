@@ -74,6 +74,11 @@ const menuItems = computed<SettingsMenuItem[]>(() => [
     icon: 'EnvelopeIcon',
   },
   {
+    title: t('settings.menu_title.ai_configuration'),
+    link: '/admin/administration/settings/ai-configuration',
+    icon: 'SparklesIcon',
+  },
+  {
     title: t('settings.menu_title.pdf_generation'),
     link: '/admin/administration/settings/pdf-generation',
     icon: 'DocumentIcon',

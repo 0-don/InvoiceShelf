@@ -159,6 +159,15 @@ const settingsRoutes: RouteRecordRaw[] = [
         component: () => import('./views/MailConfigView.vue'),
       },
       {
+        path: 'ai-config',
+        name: 'settings.ai-config',
+        meta: {
+          requiresAuth: true,
+          isOwner: true,
+        },
+        component: () => import('./views/AiConfigView.vue'),
+      },
+      {
         path: 'roles',
         name: 'settings.roles',
         meta: {

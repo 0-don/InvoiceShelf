@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CurrenciesController;
 use App\Http\Controllers\Admin\FontController;
 use App\Http\Controllers\Admin\Modules\ModuleInstallationController;
 use App\Http\Controllers\Admin\Modules\ModulesController;
+use App\Http\Controllers\Admin\Settings\AiConfigurationController;
 use App\Http\Controllers\Admin\Settings\DiskController;
 use App\Http\Controllers\Admin\Settings\MailConfigurationController;
 use App\Http\Controllers\Admin\Settings\PDFConfigurationController;
@@ -48,6 +49,7 @@ use App\Http\Controllers\Company\RecurringInvoice\RecurringInvoiceController;
 use App\Http\Controllers\Company\RecurringInvoice\RecurringInvoiceFrequencyController;
 use App\Http\Controllers\Company\Role\AbilitiesController;
 use App\Http\Controllers\Company\Role\RolesController;
+use App\Http\Controllers\Company\Settings\CompanyAiConfigurationController;
 use App\Http\Controllers\Company\Settings\CompanyController;
 use App\Http\Controllers\Company\Settings\CompanyMailConfigurationController;
 use App\Http\Controllers\Company\Settings\CompanySettingsController;
@@ -65,6 +67,7 @@ use App\Http\Controllers\CustomerPortal\General\ProfileController as CustomerPro
 use App\Http\Controllers\CustomerPortal\Invoice\InvoicesController as CustomerInvoicesController;
 use App\Http\Controllers\CustomerPortal\Payment\PaymentMethodController;
 use App\Http\Controllers\CustomerPortal\Payment\PaymentsController as CustomerPaymentsController;
+use App\Http\Controllers\Setup\AiConfigurationController as InstallerAiConfigurationController;
 use App\Http\Controllers\Setup\AppDomainController;
 use App\Http\Controllers\Setup\DatabaseConfigurationController;
 use App\Http\Controllers\Setup\FilePermissionsController;
@@ -152,6 +155,9 @@ Route::prefix('/v1')->group(function () {
         Route::get('/database/config', [DatabaseConfigurationController::class, 'getDatabaseEnvironment']);
 
         Route::put('/set-domain', AppDomainController::class);
+
+        Route::get('/ai/config', [InstallerAiConfigurationController::class, 'show']);
+        Route::post('/ai/config', [InstallerAiConfigurationController::class, 'save']);
 
         Route::post('/login', LoginController::class);
 
@@ -414,6 +420,18 @@ Route::prefix('/v1')->group(function () {
             Route::get('/company/mail/company-config', [CompanyMailConfigurationController::class, 'getMailConfig']);
             Route::post('/company/mail/company-config', [CompanyMailConfigurationController::class, 'saveMailConfig']);
             Route::post('/company/mail/company-test', [CompanyMailConfigurationController::class, 'testMailConfig']);
+
+            // AI Configuration
+            // ----------------------------------
+
+            Route::get('/ai/drivers', [AiConfigurationController::class, 'getDrivers']);
+            Route::get('/ai/config', [AiConfigurationController::class, 'getConfig']);
+            Route::post('/ai/config', [AiConfigurationController::class, 'saveConfig']);
+            Route::post('/ai/test', [AiConfigurationController::class, 'testConnection']);
+
+            Route::get('/company/ai/config', [CompanyAiConfigurationController::class, 'getConfig']);
+            Route::post('/company/ai/config', [CompanyAiConfigurationController::class, 'saveConfig']);
+            Route::post('/company/ai/test', [CompanyAiConfigurationController::class, 'testConnection']);
 
             // PDF Generation
             // ----------------------------------
