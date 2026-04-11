@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { required, email, helpers } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { useI18n } from 'vue-i18n'
@@ -75,6 +75,7 @@ const notificationStore = useNotificationStore()
 const authStore = useAuthStore()
 const { t } = useI18n()
 const router = useRouter()
+const route = useRoute()
 const isLoading = ref<boolean>(false)
 const isShowPassword = ref<boolean>(false)
 
@@ -109,7 +110,18 @@ async function onSubmit(): Promise<void> {
   try {
     await authStore.login(authStore.loginData)
 
-    router.push('/admin/dashboard')
+    // Honour a ?next= query param if present (set by the 401 response
+    // interceptor so users land back on the page they were trying to
+    // reach). Sanitize to same-origin paths only — reject protocol-
+    // relative (`//evil.com`) and absolute URLs so a crafted link
+    // can never open-redirect.
+    const nextRaw = typeof route.query.next === 'string' ? route.query.next : ''
+    const safeNext =
+      nextRaw.startsWith('/') && !nextRaw.startsWith('//')
+        ? nextRaw
+        : '/admin/dashboard'
+
+    router.push(safeNext)
 
     notificationStore.showNotification({
       type: 'success',
