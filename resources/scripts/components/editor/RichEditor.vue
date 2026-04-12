@@ -94,8 +94,11 @@ import {
   Bars3BottomRightIcon,
   Bars3Icon,
   LinkIcon,
+  SparklesIcon,
 } from '@heroicons/vue/24/solid'
 import { ContentPlaceholder, ContentPlaceholderBox } from '../layout'
+import { useGlobalStore } from '@/scripts/stores/global.store'
+import { useModalStore } from '@/scripts/stores/modal.store'
 
 interface EditorButton {
   name: string
@@ -166,6 +169,34 @@ const editorButtons = ref<EditorButton[]>([
     },
   },
 ])
+
+// AI text-generation button — shown only when the feature is enabled
+// for the current company. The flag is set once at bootstrap time so a
+// one-shot push is fine; no reactivity needed.
+const globalStore = useGlobalStore()
+const modalStore = useModalStore()
+if (globalStore.ai?.enabled && globalStore.ai?.text_generation_enabled) {
+  editorButtons.value.push({
+    name: 'aiGenerate',
+    icon: markRaw(SparklesIcon) as Component,
+    action: () => {
+      modalStore.openModal({
+        componentName: 'AiTextGenerationModal',
+        title: 'AI Text Generation',
+        size: 'md',
+        data: {
+          currentContent: editor.value?.getHTML() ?? '',
+          onInsert: (text: string) => {
+            editor.value?.chain().focus().insertContent(text).run()
+          },
+          onReplace: (text: string) => {
+            editor.value?.chain().focus().selectAll().deleteSelection().insertContent(text).run()
+          },
+        },
+      })
+    },
+  })
+}
 
 watch(
   () => props.modelValue,

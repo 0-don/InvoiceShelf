@@ -6,6 +6,8 @@ import type {
   AiConversationDetail,
   AiConversationSummary,
   AiDriversResponse,
+  AiGenerateRequest,
+  AiGenerateResponse,
   AiTestPayload,
   AiTestResponse,
   CompanyAiConfig,
@@ -82,6 +84,13 @@ export const aiService = {
 
   async deleteConversation(id: number): Promise<{ success: boolean }> {
     const { data } = await client.delete(`${API.AI_CONVERSATIONS}/${id}`)
+    return data
+  },
+
+  // --- Phase 3: text generation ---
+
+  async generateText(payload: AiGenerateRequest): Promise<AiGenerateResponse> {
+    const { data } = await client.post(API.AI_GENERATE, payload)
     return data
   },
 }

@@ -25,6 +25,9 @@
 
     <!-- AI chat drawer — always mounted, visibility driven by the store -->
     <AiChatDrawer v-if="globalStore.ai?.enabled && globalStore.ai?.chat_enabled" />
+
+    <!-- AI text generation modal — triggered from any RichEditor's Sparkles button -->
+    <AiTextGenerationModal v-if="globalStore.ai?.enabled && globalStore.ai?.text_generation_enabled" />
   </div>
 
   <BaseGlobalLoader v-else />
@@ -43,6 +46,7 @@ import SiteSidebar from './partials/SiteSidebar.vue'
 import NotificationRoot from '@/scripts/components/notifications/NotificationRoot.vue'
 import ImpersonationBanner from './partials/ImpersonationBanner.vue'
 import AiChatDrawer from '@/scripts/features/company/ai/components/AiChatDrawer.vue'
+import AiTextGenerationModal from '@/scripts/features/shared/ai/AiTextGenerationModal.vue'
 
 interface RouteMeta {
   ability?: string | string[]

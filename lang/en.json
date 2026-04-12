@@ -964,7 +964,8 @@
         "missing_api_key": "An API key is required to test the connection.",
         "ai_disabled": "AI is not enabled for this company.",
         "chat_disabled": "The chat assistant is not enabled for this company.",
-        "missing_model": "No chat model is configured."
+        "text_generation_disabled": "Text generation is not enabled for this company.",
+        "missing_model": "No model is configured."
       }
     },
     "address_information": {
@@ -1895,6 +1896,18 @@
       "send": "Send",
       "sending": "Sending…",
       "input_placeholder": "Ask about your invoices, customers, or payments…"
+    },
+    "generate": {
+      "title": "AI Text Generation",
+      "prompt_label": "What should the AI write?",
+      "prompt_placeholder": "e.g. a polite late-payment reminder for an invoice that's 10 days overdue",
+      "use_current_as_context": "Use current content as context",
+      "use_context_help": "When enabled, the AI will see the editor's current text and can rewrite or extend it.",
+      "preview": "Preview",
+      "generate": "Generate",
+      "regenerate": "Regenerate",
+      "insert": "Insert",
+      "replace": "Replace"
     }
   }
 }

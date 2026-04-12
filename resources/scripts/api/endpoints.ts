@@ -131,6 +131,9 @@ export const API = {
   AI_CHAT: '/api/v1/ai/chat',
   AI_CONVERSATIONS: '/api/v1/ai/conversations',
 
+  // AI Text Generation (Phase 3)
+  AI_GENERATE: '/api/v1/ai/generate',
+
   // PDF Configuration
   PDF_DRIVERS: '/api/v1/pdf/drivers',
   PDF_CONFIG: '/api/v1/pdf/config',

@@ -81,3 +81,16 @@ export interface AiConversationDetail {
   conversation: AiConversationSummary
   messages: AiChatMessage[]
 }
+
+// --- Phase 3: text generation types ---
+
+export interface AiGenerateRequest {
+  prompt: string
+  context?: string
+}
+
+export interface AiGenerateResponse {
+  text?: string
+  error?: string
+  message?: string
+}

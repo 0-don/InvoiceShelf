@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\AppVersionController;
 use App\Http\Controllers\Company\Ai\ChatController as AiChatController;
 use App\Http\Controllers\Company\Ai\ConversationController as AiConversationController;
+use App\Http\Controllers\Company\Ai\GenerationController as AiGenerationController;
 use App\Http\Controllers\Company\Auth\AuthController;
 use App\Http\Controllers\Company\Auth\ForgotPasswordController;
 use App\Http\Controllers\Company\Auth\InvitationRegistrationController;
@@ -435,13 +436,15 @@ Route::prefix('/v1')->group(function () {
             Route::post('/company/ai/config', [CompanyAiConfigurationController::class, 'saveConfig']);
             Route::post('/company/ai/test', [CompanyAiConfigurationController::class, 'testConnection']);
 
-            // AI Chat — rate-limited via the 'ai' limiter defined in RouteServiceProvider
+            // AI Chat + text generation — rate-limited via the 'ai' limiter defined in RouteServiceProvider
             Route::middleware('throttle:ai')->group(function () {
                 Route::post('/ai/chat', AiChatController::class);
                 Route::get('/ai/conversations', [AiConversationController::class, 'index']);
                 Route::get('/ai/conversations/{id}', [AiConversationController::class, 'show']);
                 Route::patch('/ai/conversations/{id}', [AiConversationController::class, 'update']);
                 Route::delete('/ai/conversations/{id}', [AiConversationController::class, 'destroy']);
+
+                Route::post('/ai/generate', AiGenerationController::class);
             });
 
             // PDF Generation
