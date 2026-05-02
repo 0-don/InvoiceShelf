@@ -554,8 +554,8 @@
     "invoice_sent_successfully": "आवर्ती चालान क्लोन सफल",
     "cloned_successfully": "चालान सफलतापूर्वक क्लोन किया गया",
     "clone_invoice": "Clone Recurring Invoice",
-    "confirm_clone": "This recurring invoice will be cloned into a new Recurring Invoice",
-    "add_customer_email": "Please add an email address for this customer to send invoices automatically.",
+    "confirm_clone": "",
+    "add_customer_email": "",
     "item": {
       "title": "Item Title",
       "description": "Description",
