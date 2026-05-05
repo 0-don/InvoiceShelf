@@ -1654,7 +1654,7 @@
   "pdf_total_tax_label": "TOTALE IMPOSTA",
   "pdf_tax_types_label": "Tipi di Tasse",
   "pdf_expenses_label": "Uscite",
-  "pdf_expense_group_total_label": "Group total:",
+  "pdf_expense_group_total_label": "Totale gruppo:",
   "pdf_bill_to": "Fattura a,",
   "pdf_ship_to": "Invia a,",
   "pdf_received_from": "Ricevuto da:",
