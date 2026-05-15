@@ -652,7 +652,7 @@
     "currency": "Währung",
     "contact": "Kontakt",
     "category": "Kategorie",
-    "uncategorized": "Uncategorized",
+    "uncategorized": "Unkategorisiert",
     "from_date": "Von Datum",
     "to_date": "bis Datum",
     "expense_date": "Datum",
@@ -677,10 +677,10 @@
     "no_expenses": "Noch keine Ausgaben!",
     "list_of_expenses": "Dieser Bereich enthält alle Ausgaben.",
     "confirm_delete": "Sie können diese Ausgabe nicht wiederherstellen. | Sie können diese Ausgaben nicht wiederherstellen.",
-    "duplicate_expense": "Duplicate",
+    "duplicate_expense": "Duplizieren",
     "duplicate_expense_title": "Duplicate expense",
     "duplicate_expense_modal_hint": "Change the date if you need to. (copy) is added to the note.",
-    "duplicated_message": "Expense duplicated successfully",
+    "duplicated_message": "Ausgabe erfolgreich dupliziert",
     "created_message": "Ausgabe erfolgreich erstellt",
     "updated_message": "Ausgabe erfolgreich aktualisiert",
     "deleted_message": "Ausgabe erfolgreich gelöscht | Ausgaben erfolgreich gelöscht",
@@ -1332,7 +1332,7 @@
       "update_failed": "Update fehlgeschlagen",
       "update_failed_text": "Es tut uns leid! Ihr Update ist am folgenden Schritt fehlgeschlagen: {step}",
       "update_warning": "Alle Anwendungsdateien und Standardvorlagen werden überschrieben, wenn Sie die Anwendung mit diesem Hilfsprogramm aktualisieren. Bitte machen Sie vor dem Update ein Backup Ihrer Vorlagen & Datenbank.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Das Update kann nicht fortgesetzt werden, da einige Systemvoraussetzungen nicht erfüllt sind (einschließlich der minimalen PHP-Version). Bitte korrigieren Sie die fehlgeschlagenen Anforderungen und versuchen Sie es erneut."
     },
     "backup": {
       "title": "Sicherung | Sicherungen",
