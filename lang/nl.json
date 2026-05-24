@@ -924,7 +924,7 @@
       "section_description": "Verander de manier hoe PDFs worden gegenereerd",
       "driver": "PDF driver om te gebruiken",
       "papersize": "Papier",
-      "papersize_hint": "Papersize in width and height (ex. \"210mm 297mm\")",
+      "papersize_hint": "Papierformaat in breedte en hoogte (bv. \"210mm 297mm\")",
       "gotenberg_host": "Gotenberg service host",
       "pdf_variables_save_successfully": "PDF configuratie succesvol opgeslagen",
       "pdf_variables_save_error": "PDF configuratie kon niet worden opgeslagen"
@@ -1332,7 +1332,7 @@
       "update_failed": "Update mislukt",
       "update_failed_text": "Sorry! Je update is mislukt op: {step} step ",
       "update_warning": "Alle applicatiebestanden en de standaard sjabloonbestanden worden overschreven wanneer u de applicatie aan de hand van dit hulpprogramma bijwerkt. Maak een reservekopie van uw sjabloonbestanden en databank voordat u verder gaat.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update kan niet doorgaan omdat niet aan sommige systeemvereisten wordt voldaan (inclusief minimale PHP-versie). Gelieve de mislukte vereisten aan te passen en probeer het opnieuw."
     },
     "backup": {
       "title": "Backup | Backups",
@@ -1440,7 +1440,7 @@
     "name": "Naam",
     "email": "E-mail",
     "password": "Wachtwoord",
-    "confirm_password": "bevestig wachtwoord",
+    "confirm_password": "Bevestig wachtwoord",
     "save_cont": "Opslaan doorgaan",
     "company_info": "Bedrijfsinformatie",
     "company_info_desc": "Deze informatie wordt weergegeven op facturen. Merk op dat u dit later op de instellingenpagina kunt bewerken.",
