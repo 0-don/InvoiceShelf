@@ -45,7 +45,7 @@
     "go_back": "Tillbaka",
     "back_to_login": "Till inloggningssidan?",
     "home": "Hem",
-    "filter": "Filter",
+    "filter": "Filtrera",
     "delete": "Radera",
     "edit": "Redigera",
     "view": "Visa",
@@ -78,7 +78,7 @@
     "are_you_sure": "Är du säker?",
     "list_is_empty": "Listan är tom.",
     "no_tax_found": "Hittade inte moms!",
-    "four_zero_four": "404",
+    "four_zero_four": "Sidan kunde inte hittas",
     "you_got_lost": "Hoppsan! Nu är du vilse!",
     "go_home": "Gå hem",
     "test_mail_conf": "Testa epostinställningar",
@@ -115,7 +115,7 @@
     "file_upload": {
       "drag_a_file": "Dra hit en fil",
       "browse": "Bläddra",
-      "to_choose": "to choose a file"
+      "to_choose": "Välj en fil att ladda upp"
     },
     "multiselect": {
       "the_list_is_empty": "Listan är tom",
@@ -164,9 +164,9 @@
     "description": "Beskrivning",
     "percent": "Procent",
     "compound_tax": "Sammansatt moms",
-    "percentage": "Percentage",
-    "fixed_amount": "Fixed Amount",
-    "tax_type": "Tax Type"
+    "percentage": "Momssats i procent",
+    "fixed_amount": "Fast belopp",
+    "tax_type": "Momstyp"
   },
   "global_search": {
     "search": "Sök...",
@@ -579,16 +579,16 @@
       "month": "Månad",
       "day_week": "Dag i veckan",
       "every_minute": "Varje minut",
-      "every_30_minute": "Every 30 Minute",
+      "every_30_minute": "Varje 30 minuter",
       "every_hour": "Varje timme",
-      "every_2_hour": "Every 2 Hour",
-      "every_day_at_midnight": "Every day at midnight",
+      "every_2_hour": "Varannan timme",
+      "every_day_at_midnight": "Varje dag vid midnatt",
       "every_week": "Varje vecka",
-      "every_15_days_at_midnight": "Every 15 days at midnight",
+      "every_15_days_at_midnight": "Vart 15:e dag",
       "on_the_first_day_of_every_month_at_midnight": "On the first day of every month at 00:00",
-      "every_6_month": "Every 6 Month",
+      "every_6_month": "Vart 6:e månad",
       "every_year_on_the_first_day_of_january_at_midnight": "Every year on the first day of january at 00:00",
-      "custom": "Custom"
+      "custom": "Anpassa"
     },
     "confirm_delete": "Du kommer inte kunna återställa denna faktura | Du kommer inte kunna återställa dessa fakturor",
     "created_message": "Återkommande faktura skapad framgångsrikt",
@@ -601,7 +601,7 @@
     "limit": {
       "none": "Ingen",
       "date": "Datum",
-      "count": "Count"
+      "count": "Antal"
     }
   },
   "payments": {
@@ -652,12 +652,12 @@
     "currency": "Valuta",
     "contact": "Kontakt",
     "category": "Kategori",
-    "uncategorized": "Uncategorized",
+    "uncategorized": "Okategoriserad",
     "from_date": "Från datum",
     "to_date": "Till datum",
     "expense_date": "Datum",
     "expense_number": "Utgiftsnummer",
-    "expense_number_placeholder": "EXP-001",
+    "expense_number_placeholder": "Utgifter",
     "description": "Beskrivning",
     "receipt": "Kvitto",
     "amount": "Summa",
@@ -678,9 +678,9 @@
     "list_of_expenses": "Här kommer utgifterna finnas.",
     "confirm_delete": "Du kommer inte kunna återställa denna utgift | Du kommer inte kunna återställa dessa utgifter",
     "duplicate_expense": "Kopiera",
-    "duplicate_expense_title": "Duplicate expense",
-    "duplicate_expense_modal_hint": "Change the date if you need to. (copy) is added to the note.",
-    "duplicated_message": "Expense duplicated successfully",
+    "duplicate_expense_title": "Duplicera Titeln för utgifter",
+    "duplicate_expense_modal_hint": "Ändra datum i din anteckningen ifall du behöver.",
+    "duplicated_message": "Utgift duplicerades utan problem",
     "created_message": "Utgift skapades",
     "updated_message": "Utgift ändrades",
     "deleted_message": "Utgift raderades | utgifterna raderades",
@@ -866,7 +866,7 @@
       "notes": "Anteckningar",
       "exchange_rate": "Växelkurser",
       "address_information": "Adressinformation",
-      "pdf_generation": "PDF Generation"
+      "pdf_generation": "Generera PDF"
     },
     "address_information": {
       "section_description": "  Du kan uppdatera din adressinformation genom att använda formuläret nedan."
@@ -887,10 +887,10 @@
       "name": "Namn",
       "code": "Kod",
       "symbol": "Symbol",
-      "precision": "Precision",
+      "precision": "Träffsäkerhet",
       "thousand_separator": "Tusenavgränsare",
       "decimal_separator": "Decimalavgränsare",
-      "position": "Position",
+      "position": "Position ",
       "position_of_symbol": "Symbolens position",
       "right": "Höger",
       "left": "Vänster",
@@ -920,14 +920,14 @@
       "title": "PDF-inställningar",
       "footer_text": "Sidfotstext",
       "pdf_layout": "PDF-layout",
-      "pdf_configuration": "PDF Generation Settings",
-      "section_description": "Change the way PDFs are generated",
-      "driver": "PDF Driver to use",
-      "papersize": "Papersize",
-      "papersize_hint": "Papersize in width and height (ex. \"210mm 297mm\")",
+      "pdf_configuration": "Inställningar för PDF",
+      "section_description": "Ändra tillvägagångssättet som PDF: er genereras",
+      "driver": "Välj drivrutin för PDF",
+      "papersize": "Pappersstorlek",
+      "papersize_hint": "A4",
       "gotenberg_host": "Gotenberg service host",
-      "pdf_variables_save_successfully": "PDF configuration saved successfully",
-      "pdf_variables_save_error": "PDF configuration could not be saved"
+      "pdf_variables_save_successfully": "Dina PDF-inställningar sparades",
+      "pdf_variables_save_error": "Dina PDF-inställningar sparades inte "
     },
     "company_info": {
       "company_info": "Företagsinfo",
@@ -994,7 +994,7 @@
         "customer": "Kund",
         "invoice": "Faktura",
         "estimate": "Estimat",
-        "expense": "Expense",
+        "expense": "Utgift",
         "payment": "Betalning"
       }
     },
@@ -1006,7 +1006,7 @@
       "learn_custom_format": "Lär dig hur du använder anpassat format",
       "add_new_component": "Lägg till ny komponent",
       "component": "Komponent",
-      "Parameter": "Parameter",
+      "Parameter": "Parametrar",
       "series": "Ordningsföljd",
       "series_description": "Om du vill ställa in ett statiskt prefix/postfix som \"INV\" över hela företaget. Det stöder teckenlängd på upp till 6 tecken.",
       "series_param_label": "Värde för serien",
@@ -1110,8 +1110,8 @@
         "description": "Spara tid genom att skapa noteringar som kan återanvändas på fakturor, betalningsförslag, och betalningar.",
         "notes": "Anteckningar",
         "type": "Typ",
-        "is_default": "Select by default",
-        "is_default_description": "This note will be selected by default in new invoices.",
+        "is_default": "Sätt som standardinställning",
+        "is_default_description": "Denna anteckningen visas som standard i alla nya fakturor.",
         "add_note": "Lägg till anteckning",
         "add_new_note": "Lägg till ny anteckning",
         "name": "Namn",
@@ -1122,7 +1122,7 @@
         "already_in_use": "Notering används",
         "deleted_message": "Notering raderades",
         "types": {
-          "estimate": "Estimate",
+          "estimate": "Uppskattad kostnad",
           "invoice": "Faktura",
           "payment": "Betalning"
         }
