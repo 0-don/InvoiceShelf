@@ -200,7 +200,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [master, develop]
+        branch: [2.x, develop]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -235,7 +235,7 @@ jobs:
         if: steps.changes.outputs.has_changes == 'true'
         id: tag
         run: |
-          if [ "${{ matrix.branch }}" = "master" ]; then
+          if [ "${{ matrix.branch }}" = "2.x" ]; then
             echo "tag=nightly" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.branch }}" = "develop" ]; then
             echo "tag=alpha" >> $GITHUB_OUTPUT
