@@ -7,7 +7,14 @@
       </BaseBreadcrumb>
 
       <template #actions>
-        <div class="flex items-center justify-end space-x-5">
+        <div class="flex items-center justify-end space-x-4">
+          <BaseCsvExportButton
+            v-show="itemStore.totalItems"
+            v-if="userStore.hasAbilities(abilities.VIEW_ITEM)"
+            url="/api/v1/items/export"
+            :params="exportParams"
+          />
+
           <BaseButton
             v-show="itemStore.totalItems"
             variant="primary-outline"
@@ -199,6 +206,7 @@ import { useCompanyStore } from '@/scripts/admin/stores/company'
 import { useUserStore } from '@/scripts/admin/stores/user'
 import ItemDropdown from '@/scripts/admin/components/dropdowns/ItemIndexDropdown.vue'
 import SatelliteIcon from '@/scripts/components/icons/empty/SatelliteIcon.vue'
+import BaseCsvExportButton from '@/scripts/components/BaseCsvExportButton.vue'
 import abilities from '@/scripts/admin/stub/abilities'
 
 const utils = inject('utils')
@@ -218,6 +226,12 @@ const filters = reactive({
   unit_id: '',
   price: '',
 })
+
+const exportParams = computed(() => ({
+  search: filters.name,
+  unit_id: filters.unit_id !== null ? filters.unit_id : '',
+  price: filters.price ? Math.round(filters.price * 100) : '',
+}))
 
 const table = ref(null)
 

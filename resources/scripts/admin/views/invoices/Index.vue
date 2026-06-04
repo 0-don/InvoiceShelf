@@ -8,33 +8,43 @@
       </BaseBreadcrumb>
 
       <template #actions>
-        <BaseButton
-          v-show="invoiceStore.invoiceTotalCount"
-          variant="primary-outline"
-          @click="toggleFilter"
-        >
-          {{ $t('general.filter') }}
-          <template #right="slotProps">
-            <BaseIcon
-              v-if="!showFilters"
-              name="FunnelIcon"
-              :class="slotProps.class"
-            />
-            <BaseIcon v-else name="XMarkIcon" :class="slotProps.class" />
-          </template>
-        </BaseButton>
+        <div class="flex items-center justify-end space-x-4">
+          <BaseCsvExportDropdown
+            v-show="invoiceStore.invoiceTotalCount"
+            v-if="userStore.hasAbilities(abilities.VIEW_INVOICE)"
+            document-type="invoice"
+            url="/api/v1/invoices/export"
+            :params="exportParams"
+          />
 
-        <router-link
-          v-if="userStore.hasAbilities(abilities.CREATE_INVOICE)"
-          to="invoices/create"
-        >
-          <BaseButton variant="primary" class="ml-4">
-            <template #left="slotProps">
-              <BaseIcon name="PlusIcon" :class="slotProps.class" />
+          <BaseButton
+            v-show="invoiceStore.invoiceTotalCount"
+            variant="primary-outline"
+            @click="toggleFilter"
+          >
+            {{ $t('general.filter') }}
+            <template #right="slotProps">
+              <BaseIcon
+                v-if="!showFilters"
+                name="FunnelIcon"
+                :class="slotProps.class"
+              />
+              <BaseIcon v-else name="XMarkIcon" :class="slotProps.class" />
             </template>
-            {{ $t('invoices.new_invoice') }}
           </BaseButton>
-        </router-link>
+
+          <router-link
+            v-if="userStore.hasAbilities(abilities.CREATE_INVOICE)"
+            to="invoices/create"
+          >
+            <BaseButton variant="primary">
+              <template #left="slotProps">
+                <BaseIcon name="PlusIcon" :class="slotProps.class" />
+              </template>
+              {{ $t('invoices.new_invoice') }}
+            </BaseButton>
+          </router-link>
+        </div>
       </template>
     </BasePageHeader>
 
@@ -279,6 +289,7 @@ import MoonwalkerIcon from '@/scripts/components/icons/empty/MoonwalkerIcon.vue'
 import InvoiceDropdown from '@/scripts/admin/components/dropdowns/InvoiceIndexDropdown.vue'
 import SendInvoiceModal from '@/scripts/admin/components/modal-components/SendInvoiceModal.vue'
 import BaseInvoiceStatusLabel from "@/scripts/components/base/BaseInvoiceStatusLabel.vue";
+import BaseCsvExportDropdown from '@/scripts/components/BaseCsvExportDropdown.vue'
 // Stores
 const invoiceStore = useInvoiceStore()
 const dialogStore = useDialogStore()
@@ -324,6 +335,14 @@ let filters = reactive({
   to_date: '',
   invoice_number: '',
 })
+
+const exportParams = computed(() => ({
+  customer_id: filters.customer_id,
+  status: filters.status,
+  from_date: filters.from_date,
+  to_date: filters.to_date,
+  invoice_number: filters.invoice_number,
+}))
 
 const showEmptyScreen = computed(
   () => !invoiceStore.invoiceTotalCount && !isRequestOngoing.value
