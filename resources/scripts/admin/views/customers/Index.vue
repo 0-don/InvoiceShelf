@@ -12,7 +12,14 @@
       </BaseBreadcrumb>
 
       <template #actions>
-        <div class="flex items-center justify-end space-x-5">
+        <div class="flex items-center justify-end space-x-4">
+          <BaseCsvExportButton
+            v-show="customerStore.totalCustomers"
+            v-if="userStore.hasAbilities(abilities.VIEW_CUSTOMER)"
+            url="/api/v1/customers/export"
+            :params="exportParams"
+          />
+
           <BaseButton
             v-show="customerStore.totalCustomers"
             variant="primary-outline"
@@ -206,6 +213,7 @@ import abilities from '@/scripts/admin/stub/abilities'
 
 import CustomerDropdown from '@/scripts/admin/components/dropdowns/CustomerIndexDropdown.vue'
 import AstronautIcon from '@/scripts/components/icons/empty/AstronautIcon.vue'
+import BaseCsvExportButton from '@/scripts/components/BaseCsvExportButton.vue'
 
 const companyStore = useCompanyStore()
 const dialogStore = useDialogStore()
@@ -222,6 +230,12 @@ let filters = reactive({
   contact_name: '',
   phone: '',
 })
+
+const exportParams = computed(() => ({
+  display_name: filters.display_name,
+  contact_name: filters.contact_name,
+  phone: filters.phone,
+}))
 
 const showEmptyScreen = computed(
   () => !customerStore.totalCustomers && !isFetchingInitialData.value
