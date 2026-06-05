@@ -67,11 +67,7 @@ class DriverRegistryProvider extends ServiceProvider
 
     protected function registerAiDrivers(): void
     {
-        // Use the generic registerDriver('ai', ...) rather than a registerAiDriver()
-        // convenience wrapper: that wrapper is not present in published
-        // invoiceshelf/modules releases, so calling it breaks app boot on a clean
-        // composer install. registerDriver() is the stable API (ships in 3.0.x).
-        Registry::registerDriver('ai', 'openrouter', [
+        Registry::registerAiDriver('openrouter', [
             'class' => OpenRouterDriver::class,
             'label' => 'settings.ai.openrouter',
             'website' => 'https://openrouter.ai',
