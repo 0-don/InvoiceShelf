@@ -2,3 +2,4 @@
 !public/
 !templates/
 !.gitignore
+!modules_statuses.json
