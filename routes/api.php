@@ -28,11 +28,6 @@ use App\Http\Controllers\V1\Admin\Expense\ExpenseCategoriesController;
 use App\Http\Controllers\V1\Admin\Expense\ExpensesController;
 use App\Http\Controllers\V1\Admin\Expense\ShowReceiptController;
 use App\Http\Controllers\V1\Admin\Expense\UploadReceiptController;
-use App\Http\Controllers\V1\Admin\Export\ExportCustomersController;
-use App\Http\Controllers\V1\Admin\Export\ExportEstimatesController;
-use App\Http\Controllers\V1\Admin\Export\ExportExpensesController;
-use App\Http\Controllers\V1\Admin\Export\ExportInvoicesController;
-use App\Http\Controllers\V1\Admin\Export\ExportItemsController;
 use App\Http\Controllers\V1\Admin\General\BootstrapController;
 use App\Http\Controllers\V1\Admin\General\BulkExchangeRateController;
 use App\Http\Controllers\V1\Admin\General\ConfigController;
@@ -253,16 +248,12 @@ Route::prefix('/v1')->group(function () {
 
             Route::get('customers/{customer}/stats', CustomerStatsController::class);
 
-            Route::get('customers/export', ExportCustomersController::class);
-
             Route::resource('customers', CustomersController::class);
 
             // Items
             // ----------------------------------
 
             Route::post('/items/delete', [ItemsController::class, 'delete']);
-
-            Route::get('items/export', ExportItemsController::class);
 
             Route::resource('items', ItemsController::class);
 
@@ -282,8 +273,6 @@ Route::prefix('/v1')->group(function () {
             Route::post('/invoices/delete', [InvoicesController::class, 'delete']);
 
             Route::get('/invoices/templates', InvoiceTemplatesController::class);
-
-            Route::get('invoices/export', ExportInvoicesController::class);
 
             Route::apiResource('invoices', InvoicesController::class);
 
@@ -311,8 +300,6 @@ Route::prefix('/v1')->group(function () {
 
             Route::get('/estimates/templates', EstimateTemplatesController::class);
 
-            Route::get('estimates/export', ExportEstimatesController::class);
-
             Route::post('/estimates/delete', [EstimatesController::class, 'delete']);
 
             Route::apiResource('estimates', EstimatesController::class);
@@ -325,8 +312,6 @@ Route::prefix('/v1')->group(function () {
             Route::post('/expenses/{expense}/upload/receipts', UploadReceiptController::class);
 
             Route::post('/expenses/delete', [ExpensesController::class, 'delete']);
-
-            Route::get('expenses/export', ExportExpensesController::class);
 
             Route::post('/expenses/{expense}/duplicate', DuplicateExpenseController::class);
 

@@ -10,41 +10,33 @@
       </BaseBreadcrumb>
 
       <template #actions>
-        <div class="flex items-center justify-end space-x-4">
-          <BaseCsvExportButton
-            v-show="expenseStore.totalExpenses"
-            v-if="userStore.hasAbilities(abilities.VIEW_EXPENSE)"
-            url="/api/v1/expenses/export"
-            :params="exportParams"
-          />
+        <BaseButton
+          v-show="expenseStore.totalExpenses"
+          variant="primary-outline"
+          @click="toggleFilter"
+        >
+          {{ $t('general.filter') }}
+          <template #right="slotProps">
+            <BaseIcon
+              v-if="!showFilters"
+              name="FunnelIcon"
+              :class="slotProps.class"
+            />
+            <BaseIcon v-else name="XMarkIcon" :class="slotProps.class" />
+          </template>
+        </BaseButton>
 
-          <BaseButton
-            v-show="expenseStore.totalExpenses"
-            variant="primary-outline"
-            @click="toggleFilter"
-          >
-            {{ $t('general.filter') }}
-            <template #right="slotProps">
-              <BaseIcon
-                v-if="!showFilters"
-                name="FunnelIcon"
-                :class="slotProps.class"
-              />
-              <BaseIcon v-else name="XMarkIcon" :class="slotProps.class" />
-            </template>
-          </BaseButton>
-
-          <BaseButton
-            v-if="userStore.hasAbilities(abilities.CREATE_EXPENSE)"
-            variant="primary"
-            @click="$router.push('expenses/create')"
-          >
-            <template #left="slotProps">
-              <BaseIcon name="PlusIcon" :class="slotProps.class" />
-            </template>
-            {{ $t('expenses.add_expense') }}
-          </BaseButton>
-        </div>
+        <BaseButton
+          v-if="userStore.hasAbilities(abilities.CREATE_EXPENSE)"
+          class="ml-4"
+          variant="primary"
+          @click="$router.push('expenses/create')"
+        >
+          <template #left="slotProps">
+            <BaseIcon name="PlusIcon" :class="slotProps.class" />
+          </template>
+          {{ $t('expenses.add_expense') }}
+        </BaseButton>
       </template>
     </BasePageHeader>
 
@@ -243,7 +235,6 @@ import abilities from '@/scripts/admin/stub/abilities'
 import UFOIcon from '@/scripts/components/icons/empty/UFOIcon.vue'
 import DuplicateExpenseModal from '@/scripts/admin/components/modal-components/DuplicateExpenseModal.vue'
 import ExpenseDropdown from '@/scripts/admin/components/dropdowns/ExpenseIndexDropdown.vue'
-import BaseCsvExportButton from '@/scripts/components/BaseCsvExportButton.vue'
 
 const companyStore = useCompanyStore()
 const expenseStore = useExpenseStore()
@@ -260,13 +251,6 @@ const filters = reactive({
   to_date: '',
   customer_id: '',
 })
-
-const exportParams = computed(() => ({
-  expense_category_id: filters.expense_category_id,
-  from_date: filters.from_date,
-  to_date: filters.to_date,
-  customer_id: filters.customer_id,
-}))
 
 const { t } = useI18n()
 let tableComponent = ref(null)

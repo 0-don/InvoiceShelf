@@ -14,43 +14,33 @@
       </BaseBreadcrumb>
 
       <template #actions>
-        <div class="flex items-center justify-end space-x-4">
-          <BaseCsvExportDropdown
-            v-show="estimateStore.totalEstimateCount"
-            v-if="userStore.hasAbilities(abilities.VIEW_ESTIMATE)"
-            document-type="estimate"
-            url="/api/v1/estimates/export"
-            :params="exportParams"
-          />
+        <BaseButton
+          v-show="estimateStore.totalEstimateCount"
+          variant="primary-outline"
+          @click="toggleFilter"
+        >
+          {{ $t('general.filter') }}
+          <template #right="slotProps">
+            <BaseIcon
+              v-if="!showFilters"
+              :class="slotProps.class"
+              name="FunnelIcon"
+            />
+            <BaseIcon v-else name="XMarkIcon" :class="slotProps.class" />
+          </template>
+        </BaseButton>
 
-          <BaseButton
-            v-show="estimateStore.totalEstimateCount"
-            variant="primary-outline"
-            @click="toggleFilter"
-          >
-            {{ $t('general.filter') }}
-            <template #right="slotProps">
-              <BaseIcon
-                v-if="!showFilters"
-                :class="slotProps.class"
-                name="FunnelIcon"
-              />
-              <BaseIcon v-else name="XMarkIcon" :class="slotProps.class" />
+        <router-link
+          v-if="userStore.hasAbilities(abilities.CREATE_ESTIMATE)"
+          to="estimates/create"
+        >
+          <BaseButton variant="primary" class="ml-4">
+            <template #left="slotProps">
+              <BaseIcon name="PlusIcon" :class="slotProps.class" />
             </template>
+            {{ $t('estimates.new_estimate') }}
           </BaseButton>
-
-          <router-link
-            v-if="userStore.hasAbilities(abilities.CREATE_ESTIMATE)"
-            to="estimates/create"
-          >
-            <BaseButton variant="primary">
-              <template #left="slotProps">
-                <BaseIcon name="PlusIcon" :class="slotProps.class" />
-              </template>
-              {{ $t('estimates.new_estimate') }}
-            </BaseButton>
-          </router-link>
-        </div>
+        </router-link>
       </template>
     </BasePageHeader>
 
@@ -261,7 +251,6 @@ import ObservatoryIcon from '@/scripts/components/icons/empty/ObservatoryIcon.vu
 import EstimateDropDown from '@/scripts/admin/components/dropdowns/EstimateIndexDropdown.vue'
 import SendEstimateModal from '@/scripts/admin/components/modal-components/SendEstimateModal.vue'
 import BaseEstimateStatusLabel from "@/scripts/components/base/BaseEstimateStatusLabel.vue";
-import BaseCsvExportDropdown from '@/scripts/components/BaseCsvExportDropdown.vue'
 
 const estimateStore = useEstimateStore()
 const dialogStore = useDialogStore()
@@ -291,14 +280,6 @@ let filters = reactive({
   to_date: '',
   estimate_number: '',
 })
-
-const exportParams = computed(() => ({
-  customer_id: filters.customer_id,
-  status: filters.status,
-  from_date: filters.from_date,
-  to_date: filters.to_date,
-  estimate_number: filters.estimate_number,
-}))
 
 const showEmptyScreen = computed(
   () => !estimateStore.totalEstimateCount && !isRequestOngoing.value
