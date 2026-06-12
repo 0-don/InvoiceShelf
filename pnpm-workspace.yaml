@@ -11,3 +11,4 @@ allowBuilds:
 # Replaces the dead package.json "resolutions" field (npm/pnpm read "overrides").
 overrides:
   brace-expansion: ^5.0.6
+  postcss: ^8.5.10
