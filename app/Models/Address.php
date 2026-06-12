@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Symfony\Component\Intl\Countries;
 
 class Address extends Model
 {
@@ -18,9 +19,18 @@ class Address extends Model
 
     public function getCountryNameAttribute(): ?string
     {
-        $name = $this->country ? $this->country->name : null;
+        if (! $this->country) {
+            return null;
+        }
 
-        return $name;
+        try {
+            return Countries::getName(
+                $this->country->code,
+                app()->getLocale()
+            );
+        } catch (\Exception $e) {
+            return $this->country->name;
+        }
     }
 
     public function user(): BelongsTo
