@@ -21,10 +21,10 @@ jobs:
             php: ${{ steps.filter.outputs.php }}
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
 
             - name: Check for file changes
-              uses: dorny/paths-filter@v3
+              uses: dorny/paths-filter@v4
               id: filter
               with:
                   filters: |
@@ -45,7 +45,7 @@ jobs:
         if: (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository)
         steps:
             - name: Cancel Previous Runs
-              uses: styfle/cancel-workflow-action@0.12.1
+              uses: styfle/cancel-workflow-action@0.13.1
               with:
                   access_token: ${{ github.token }}
 
@@ -63,10 +63,10 @@ jobs:
                   php-version: 8.4
 
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
 
             - name: Install dependencies
-              uses: ramsey/composer-install@v2
+              uses: ramsey/composer-install@4.0.0
 
             - name: Check source code for syntax errors
               run: ./vendor/bin/pint --test
@@ -87,29 +87,21 @@ jobs:
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v4
+              uses: actions/checkout@v6
 
             - name: Setup PHP Action
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-version }}
                   extensions: ${{ env.extensions }}
-                  coverage: xdebug
+                  coverage: none
                   tools: pecl, composer
 
             - name: Install Composer dependencies
-              uses: ramsey/composer-install@v2
+              uses: ramsey/composer-install@4.0.0
 
-            - name: Use Node.js 24
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 24
+            - name: Apply tests ${{ matrix.php-version }} (parallel)
+              run: php artisan test --parallel --exclude-group=modules
 
-            - name: Install
-              run: npm install
-
-            - name: Compile Front-end
-              run: npm run build
-
-            - name: Apply tests ${{ matrix.php-version }}
-              run: php artisan test
+            - name: Apply module tests ${{ matrix.php-version }} (serial)
+              run: php artisan test --group=modules
