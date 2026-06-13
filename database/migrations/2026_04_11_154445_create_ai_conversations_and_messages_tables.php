@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('ai_conversations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unsignedInteger('company_id');
+            $table->unsignedInteger('user_id');
             $table->string('title')->nullable();
             $table->string('model', 100)->nullable();
             $table->timestamps();
