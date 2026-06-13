@@ -7,6 +7,7 @@ use App\Providers\DriverRegistryProvider;
 use App\Providers\DropboxServiceProvider;
 use App\Providers\PdfServiceProvider;
 use App\Providers\RouteServiceProvider;
+use App\Providers\ScrambleServiceProvider;
 use App\Providers\ViewServiceProvider;
 use App\Support\Hashids\HashidsServiceProvider;
 
@@ -20,4 +21,5 @@ return [
     DriverRegistryProvider::class,
     AiServiceProvider::class,
     AppConfigProvider::class,
+    ScrambleServiceProvider::class,
 ];
