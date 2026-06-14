@@ -26,6 +26,7 @@
     "copy_pdf_url": "Copiar URL do PDF",
     "download_pdf": "Baixar PDF",
     "save": "Salvar",
+    "skip": "Skip",
     "create": "Criar",
     "cancel": "Cancelar",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "Atualização falhou",
       "update_failed_text": "Desculpa! Sua atualização falhou em: {step} step",
       "update_warning": "Todos os arquivos do aplicativo e modelos padrão serão sobrescritos ao atualizar o aplicativo usando esta ferramenta. Faça backup de seus modelos e banco de dados antes de atualizar.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "Backup | Backups",
