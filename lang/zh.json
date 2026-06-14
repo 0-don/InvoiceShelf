@@ -26,6 +26,7 @@
     "copy_pdf_url": "複製PDF位址",
     "download_pdf": "下載 PDF",
     "save": "儲存",
+    "skip": "Skip",
     "create": "新增",
     "cancel": "取消",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "更新失敗",
       "update_failed_text": "抱歉! 你的更新在這步驟中失敗: {step} step",
       "update_warning": "All of the application files and default template files will be overwritten when you update the application using this utility. Please take a backup of your templates & database before updating.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "備份 | 備份",
