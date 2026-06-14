@@ -5,7 +5,6 @@ import { useUserStore } from '@/scripts/stores/user.store'
 import { useModalStore } from '@/scripts/stores/modal.store'
 import { useItemStore } from '@/scripts/features/company/items/store'
 import { ABILITIES } from '@/scripts/config/abilities'
-import ItemModal from '@/scripts/features/company/items/components/ItemModal.vue'
 import type { Item } from '@/scripts/types/domain'
 import type { Tax } from '@/scripts/types/domain'
 
@@ -58,11 +57,17 @@ const { t } = useI18n()
 const itemSelect = ref<Item | null>(null)
 const multiselectRef = ref<{ close?: () => void } | null>(null)
 const loading = ref<boolean>(false)
+const searchQuery = ref<string>('')
 const itemData = reactive<LineItem>({ ...props.item })
 
 async function searchItems(search: string): Promise<Item[]> {
   const res = await itemStore.fetchItems({ search })
   return res.data as unknown as Item[]
+}
+
+function onSearchChange(val: string): void {
+  searchQuery.value = val
+  emit('search', val)
 }
 
 const description = computed<string | null>({
@@ -81,10 +86,9 @@ function openItemModal(): void {
       title: t('items.add_item'),
       componentName: 'ItemModal',
       refreshData: (val: Item) => emit('select', val),
+      // ItemModal owns its own form; hand it the typed search text to pre-fill the name.
       data: {
-        taxPerItem: props.taxPerItem,
-        taxes: props.taxes,
-        itemIndex: props.index,
+        name: searchQuery.value,
       },
     })
   })
@@ -100,8 +104,6 @@ function deselectItem(index: number): void {
 
 <template>
   <div class="flex-1 text-sm">
-    <ItemModal />
-
     <!-- Selected Item Field  -->
     <div
       v-if="item.item_id"
@@ -145,7 +147,7 @@ function deselectItem(index: number): void {
       :options="searchItems"
       object
       @update:model-value="(val: Item) => $emit('select', val)"
-      @search-change="(val: string) => $emit('search', val)"
+      @search-change="onSearchChange"
     >
       <!-- Add Item Action  -->
       <template #action>

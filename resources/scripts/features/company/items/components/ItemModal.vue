@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import {
-  required,
-  minLength,
-  maxLength,
-  helpers,
-} from '@vuelidate/validators'
-import useVuelidate from '@vuelidate/core'
 import { useModalStore } from '../../../../stores/modal.store'
 import { useCompanyStore } from '../../../../stores/company.store'
 import { useUserStore } from '../../../../stores/user.store'
 import { useItemStore } from '../store'
 import { useTaxTypes } from '../use-tax-types'
 import ItemUnitModal from '@/scripts/features/company/settings/components/ItemUnitModal.vue'
+import { useNotificationStore } from '../../../../stores/notification.store'
+import {
+  handleApiError,
+  getErrorTranslationKey,
+} from '../../../../utils/error-handling'
 import type { TaxType } from '@/scripts/types/domain/tax'
 
 interface TaxOption {
@@ -23,6 +21,14 @@ interface TaxOption {
   fixed_amount: number
   calculation_type: string | null
   tax_name: string
+}
+
+interface ItemFormState {
+  name: string
+  description: string
+  price: number
+  unit_id: string | number | null
+  taxes: TaxOption[]
 }
 
 const ABILITIES = {
@@ -39,10 +45,12 @@ const modalStore = useModalStore()
 const itemStore = useItemStore()
 const companyStore = useCompanyStore()
 const userStore = useUserStore()
+const notificationStore = useNotificationStore()
 const { taxTypes, fetchTaxTypes } = useTaxTypes()
 
 const { t } = useI18n()
 const isLoading = ref<boolean>(false)
+const triedSubmit = ref<boolean>(false)
 const taxPerItemSetting = ref<string>(
   companyStore.selectedCompanySettings.tax_per_item || 'NO'
 )
@@ -51,59 +59,70 @@ const modalActive = computed<boolean>(
   () => modalStore.active && modalStore.componentName === 'ItemModal'
 )
 
+// Local form state owned by this modal. ItemModal is permanently mounted (inside
+// DocumentItemsTable, via BaseModal's `static` dialog); @vuelidate did not track
+// this reactive form's values in that context (it kept validating an empty
+// snapshot), so validation here is done with plain reactive computeds instead —
+// the same reactivity the price/taxes computeds below already rely on.
+const form = reactive<ItemFormState>({
+  name: '',
+  description: '',
+  price: 0,
+  unit_id: '',
+  taxes: [],
+})
+
+const nameError = computed<string>(() => {
+  const value = (form.name ?? '').trim()
+  if (!value) {
+    return t('validation.required')
+  }
+  if (value.length < 3) {
+    return t('validation.name_min_length', { count: 3 })
+  }
+  return ''
+})
+
+const descriptionError = computed<string>(() => {
+  if ((form.description ?? '').length > 255) {
+    return t('validation.description_maxlength', { count: 255 })
+  }
+  return ''
+})
+
+const isFormValid = computed<boolean>(
+  () => !nameError.value && !descriptionError.value
+)
+
 const price = computed<number>({
-  get: () => itemStore.currentItem.price / 100,
+  get: () => form.price / 100,
   set: (value: number) => {
-    itemStore.currentItem.price = Math.round(value * 100)
+    form.price = Math.round(value * 100)
   },
 })
 
-const taxes = computed({
+const taxes = computed<TaxOption[]>({
   get: () =>
-    itemStore.currentItem.taxes?.map((tax) => {
-      if (tax) {
-        const currencySymbol = companyStore.selectedCompanyCurrency?.symbol ?? '$'
-        return {
-          ...tax,
-          tax_type_id: tax.id,
-          tax_name: `${tax.name} (${
-            tax.calculation_type === 'fixed'
-              ? tax.fixed_amount + currencySymbol
-              : tax.percent + '%'
-          })`,
-        }
+    form.taxes?.map((tax) => {
+      const currencySymbol = companyStore.selectedCompanyCurrency?.symbol ?? '$'
+      return {
+        ...tax,
+        tax_type_id: tax.id,
+        tax_name: `${tax.name} (${
+          tax.calculation_type === 'fixed'
+            ? tax.fixed_amount + currencySymbol
+            : tax.percent + '%'
+        })`,
       }
-      return tax
     }) ?? [],
   set: (value: TaxOption[]) => {
-    itemStore.currentItem.taxes = value as unknown as typeof itemStore.currentItem.taxes
+    form.taxes = value
   },
 })
 
 const isTaxPerItemEnabled = computed<boolean>(() => {
   return taxPerItemSetting.value === 'YES'
 })
-
-const rules = {
-  name: {
-    required: helpers.withMessage(t('validation.required'), required),
-    minLength: helpers.withMessage(
-      t('validation.name_min_length', { count: 3 }),
-      minLength(3)
-    ),
-  },
-  description: {
-    maxLength: helpers.withMessage(
-      t('validation.description_maxlength', { count: 255 }),
-      maxLength(255)
-    ),
-  },
-}
-
-const v$ = useVuelidate(
-  rules,
-  computed(() => itemStore.currentItem)
-)
 
 const getTaxTypes = computed<TaxOption[]>(() => {
   return taxTypes.value.map((tax: TaxType) => {
@@ -123,8 +142,24 @@ const getTaxTypes = computed<TaxOption[]>(() => {
   }) as TaxOption[]
 })
 
+// Reset + prefill the form every time the modal opens. The typed item-search
+// text is handed in via modalStore.data.name by BaseItemSelect.
+watch(modalActive, (active) => {
+  if (!active) {
+    return
+  }
+  const data = modalStore.data as { name?: string } | null
+  Object.assign(form, {
+    name: data?.name ?? '',
+    description: '',
+    price: 0,
+    unit_id: '',
+    taxes: [],
+  })
+  triedSubmit.value = false
+})
+
 onMounted(async () => {
-  v$.value.$reset()
   await itemStore.fetchItemUnits({ limit: 'all' })
 
   if (userStore.hasAbilities(ABILITIES.VIEW_TAX_TYPE)) {
@@ -133,20 +168,27 @@ onMounted(async () => {
 })
 
 async function submitItemData(): Promise<void> {
-  v$.value.$touch()
+  triedSubmit.value = true
 
-  if (v$.value.$invalid) {
+  if (!isFormValid.value) {
+    notificationStore.showNotification({
+      type: 'error',
+      message: nameError.value || descriptionError.value,
+    })
     return
   }
 
   const data: Record<string, unknown> = {
-    ...itemStore.currentItem,
-    taxes: itemStore.currentItem.taxes.map((tax) => ({
+    name: form.name,
+    description: form.description,
+    price: form.price,
+    unit_id: form.unit_id || null,
+    taxes: (form.taxes ?? []).map((tax) => ({
       tax_type_id: tax.id,
       amount:
         tax.calculation_type === 'fixed'
           ? tax.fixed_amount
-          : Math.round(price.value * tax.percent),
+          : Math.round((form.price / 100) * tax.percent),
       percent: tax.percent,
       fixed_amount: tax.fixed_amount,
       calculation_type: tax.calculation_type,
@@ -157,19 +199,21 @@ async function submitItemData(): Promise<void> {
 
   isLoading.value = true
 
-  const action = itemStore.isEdit ? itemStore.updateItem : itemStore.addItem
-
   try {
-    const res = await action(data)
+    const res = await itemStore.addItem(data)
     isLoading.value = false
-    if (res.data) {
-      if (modalStore.refreshData) {
-        modalStore.refreshData(res.data)
-      }
+    if (res.data && modalStore.refreshData) {
+      modalStore.refreshData(res.data)
     }
     closeItemModal()
-  } catch {
+  } catch (err: unknown) {
     isLoading.value = false
+    const normalized = handleApiError(err)
+    const translationKey = getErrorTranslationKey(normalized.message)
+    notificationStore.showNotification({
+      type: 'error',
+      message: translationKey ? t(translationKey) : normalized.message,
+    })
   }
 }
 
@@ -179,7 +223,7 @@ function addItemUnit(): void {
     componentName: 'ItemUnitModal',
     size: 'sm',
     refreshData: (unit: { id: number }) => {
-      itemStore.currentItem.unit_id = unit.id
+      form.unit_id = unit.id
     },
   })
 }
@@ -187,8 +231,7 @@ function addItemUnit(): void {
 function closeItemModal(): void {
   modalStore.closeModal()
   setTimeout(() => {
-    itemStore.resetCurrentItem()
-    v$.value.$reset()
+    triedSubmit.value = false
   }, 300)
 }
 </script>
@@ -212,13 +255,12 @@ function closeItemModal(): void {
             <BaseInputGroup
               :label="$t('items.name')"
               required
-              :error="v$.name.$error && v$.name.$errors[0].$message"
+              :error="triedSubmit ? nameError : ''"
             >
               <BaseInput
-                v-model="itemStore.currentItem.name"
+                v-model="form.name"
                 type="text"
-                :invalid="v$.name.$error"
-                @input="v$.name.$touch()"
+                :invalid="Boolean(triedSubmit && nameError)"
               />
             </BaseInputGroup>
 
@@ -237,7 +279,7 @@ function closeItemModal(): void {
 
             <BaseInputGroup :label="$t('items.unit')">
               <BaseMultiselect
-                v-model="itemStore.currentItem.unit_id"
+                v-model="form.unit_id"
                 label="name"
                 :options="itemStore.itemUnits"
                 value-prop="id"
@@ -281,16 +323,13 @@ function closeItemModal(): void {
 
             <BaseInputGroup
               :label="$t('items.description')"
-              :error="
-                v$.description.$error && v$.description.$errors[0].$message
-              "
+              :error="triedSubmit ? descriptionError : ''"
             >
               <BaseTextarea
-                v-model="itemStore.currentItem.description"
+                v-model="form.description"
                 rows="4"
                 cols="50"
-                :invalid="v$.description.$error"
-                @input="v$.description.$touch()"
+                :invalid="Boolean(triedSubmit && descriptionError)"
               />
             </BaseInputGroup>
           </BaseInputGrid>
@@ -315,7 +354,7 @@ function closeItemModal(): void {
             <template #left="slotProps">
               <BaseIcon name="ArrowDownOnSquareIcon" :class="slotProps.class" />
             </template>
-            {{ itemStore.isEdit ? $t('general.update') : $t('general.save') }}
+            {{ $t('general.save') }}
           </BaseButton>
         </div>
       </form>

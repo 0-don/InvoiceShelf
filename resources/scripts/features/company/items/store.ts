@@ -61,7 +61,12 @@ export const useItemStore = defineStore('item', () => {
 
   // Actions
   function resetCurrentItem(): void {
-    currentItem.value = createItemStub()
+    // Mutate in place (don't replace the object) so that vuelidate / v-model
+    // bindings attached to currentItem stay valid. Replacing it leaves the
+    // ItemModal validator bound to the old, empty object (it then reports a
+    // stale "name is required" even after you type). Stale/extra keys are
+    // harmless — the backend uses $request->validated().
+    Object.assign(currentItem.value, createItemStub(), { id: undefined })
   }
 
   async function fetchItems(params?: ItemListParams): Promise<ItemListResponse> {

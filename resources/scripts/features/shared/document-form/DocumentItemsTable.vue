@@ -1,5 +1,9 @@
 <template>
   <div class="rounded-xl border border-line-light shadow bg-surface">
+    <!-- Single shared item-create modal for the whole table (one instance, not one
+         per row — stacked HeadlessUI dialogs would otherwise close each other). -->
+    <ItemModal />
+
     <!-- Tax Included Toggle -->
     <div
       v-if="taxIncludedSetting === 'YES'"
@@ -109,6 +113,7 @@
 import { computed } from 'vue'
 import draggable from 'vuedraggable'
 import DocumentItemRow from './DocumentItemRow.vue'
+import ItemModal from '@/scripts/features/company/items/components/ItemModal.vue'
 import type { Currency } from '../../../types/domain/currency'
 import type { DocumentFormData } from './use-document-calculations'
 
