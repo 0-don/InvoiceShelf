@@ -30,11 +30,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        if ($user->isOwner()) {
-            return true;
-        }
-
-        return false;
+        return $user->isOwner() && $this->sharesActiveCompany($model);
     }
 
     /**
@@ -58,11 +54,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        if ($user->isOwner()) {
-            return true;
-        }
-
-        return false;
+        return $user->isOwner() && $this->sharesActiveCompany($model);
     }
 
     /**
@@ -72,11 +64,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        if ($user->isOwner()) {
-            return true;
-        }
-
-        return false;
+        return $user->isOwner() && $this->sharesActiveCompany($model);
     }
 
     /**
@@ -133,5 +121,19 @@ class UserPolicy
         }
 
         return false;
+    }
+
+    /**
+     * A company owner may only act on members of the company set in the
+     * `company` request header. Without this, view/update/delete resolve the
+     * target user by global id, which would let an owner of one company read
+     * or overwrite users belonging to another company (cross-tenant IDOR).
+     */
+    private function sharesActiveCompany(User $model): bool
+    {
+        $companyId = request()->header('company');
+
+        return $companyId
+            && $model->companies()->wherePivot('company_id', $companyId)->exists();
     }
 }

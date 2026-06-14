@@ -54,10 +54,33 @@ test('store user using a form request', function () {
 //     ]);
 // });
 
-test('get user', function () {
+test('get user belonging to the current company', function () {
+    $companyId = User::where('role', 'super admin')->first()->companies()->first()->id;
     $user = User::factory()->create();
+    $user->companies()->attach($companyId);
 
     getJson("/api/v1/users/{$user->id}")->assertOk();
+});
+
+test('cannot view a user belonging to another company', function () {
+    $user = User::factory()->create();
+    $user->companies()->attach(Company::factory()->create()->id);
+
+    getJson("/api/v1/users/{$user->id}")->assertForbidden();
+});
+
+test('cannot update a user belonging to another company', function () {
+    $companyId = User::where('role', 'super admin')->first()->companies()->first()->id;
+    $user = User::factory()->create();
+    $user->companies()->attach(Company::factory()->create()->id);
+
+    putJson("/api/v1/users/{$user->id}", [
+        'name' => 'Hacked',
+        'email' => 'pwned@attacker.test',
+        'companies' => [['id' => $companyId, 'role' => 'super admin']],
+    ])->assertForbidden();
+
+    $this->assertDatabaseMissing('users', ['email' => 'pwned@attacker.test']);
 });
 
 test('update user using a form request', function () {
