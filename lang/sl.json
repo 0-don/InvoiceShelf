@@ -26,6 +26,7 @@
     "copy_pdf_url": "Kopiraj PDF Url",
     "download_pdf": "Naloži PDF",
     "save": "Shrani",
+    "skip": "Skip",
     "create": "Ustvari",
     "cancel": "Prekliči",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "Posodobitev ni uspela",
       "update_failed_text": "Žal mi je! Posodobitev je bila neuspešna na : {step} koraku",
       "update_warning": "Ko posodobite aplikacijo s tem orodjem, se prepišejo vse datoteke aplikacije in privzete datoteke predlog. Pred posodabljanjem naredite varnostno kopijo predlog in zbirke podatkov.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "Varnostno kopiranje | Varnostne kopije",
