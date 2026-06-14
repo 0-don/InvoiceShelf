@@ -186,6 +186,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            composer_auth={"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}
 
   manual_docker_build:
     name: 🛠️ Manual Docker Build
@@ -216,3 +218,5 @@ jobs:
           tags: invoiceshelf/invoiceshelf:${{ github.event.inputs.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          secrets: |
+            composer_auth={"github-oauth":{"github.com":"${{ secrets.GITHUB_TOKEN }}"}}

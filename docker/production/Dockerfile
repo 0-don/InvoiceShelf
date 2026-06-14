@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM --platform=$BUILDPLATFORM node:24 AS static_builder
     WORKDIR /var/www/html
     COPY . /var/www/html
@@ -43,4 +44,10 @@ FROM base AS production
     # never clobber the fresh one produced by static_builder.
     COPY --chown=www-data:www-data . /var/www/html
     COPY --from=static_builder --chown=www-data:www-data /var/www/html/public/build /var/www/html/public/build
-    RUN composer install --prefer-dist --no-dev --optimize-autoloader
+    # Authenticate composer against GitHub when a token is provided (build secret),
+    # so multi-arch builds don't exhaust the unauthenticated API rate limit while the
+    # merge-plugin resolves modules. The secret is build-time only (never in the image),
+    # and the step still works without it for local builds.
+    RUN --mount=type=secret,id=composer_auth,mode=0444 \
+        COMPOSER_AUTH="$(cat /run/secrets/composer_auth 2>/dev/null || true)" \
+        composer install --prefer-dist --no-dev --optimize-autoloader
