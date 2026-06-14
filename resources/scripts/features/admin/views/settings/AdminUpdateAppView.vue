@@ -34,6 +34,7 @@ const { t } = useI18n()
 const isCheckingForUpdate = ref(false)
 const isUpdating = ref(false)
 const insiderChannel = ref(false)
+const isContainerized = ref(false)
 const currentVersion = ref('')
 const updateRelease = ref<UpdateRelease | null>(null)
 const isMinorUpdate = ref(false)
@@ -103,6 +104,7 @@ async function loadCurrentVersion(): Promise<void> {
     const response = await settingService.getAppVersion()
     currentVersion.value = response.version
     insiderChannel.value = response.channel === 'insider'
+    isContainerized.value = Boolean(response.containerized)
   } catch (error: unknown) {
     showApiError(error)
   }
@@ -316,12 +318,37 @@ function showApiError(error: unknown): void {
         </div>
       </div>
 
-      <div class="pt-4">
-        <BaseCheckbox
-          v-model="insiderChannel"
-          :label="$t('settings.update_app.insider_consent')"
-        />
+      <!-- Containerized (Docker) install: the in-app updater is disabled. -->
+      <div v-if="isContainerized" class="mt-4 rounded-md bg-primary-50 p-4">
+        <div class="flex">
+          <div class="shrink-0">
+            <BaseIcon
+              name="InformationCircleIcon"
+              class="h-5 w-5 text-primary-400"
+            />
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-primary-800">
+              {{ $t('settings.update_app.containerized_title') }}
+            </h3>
+            <div class="mt-2 text-sm text-primary-700">
+              <p>{{ $t('settings.update_app.containerized_message') }}</p>
+              <pre
+                class="mt-3 overflow-x-auto rounded-md bg-surface-muted p-3 text-xs text-body"
+              >docker compose pull
+docker compose up --force-recreate --build -d</pre>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <template v-else>
+        <div class="pt-4">
+          <BaseCheckbox
+            v-model="insiderChannel"
+            :label="$t('settings.update_app.insider_consent')"
+          />
+        </div>
 
       <BaseButton
         :loading="isCheckingForUpdate"
@@ -457,6 +484,7 @@ function showApiError(error: unknown): void {
           </li>
         </ul>
       </div>
+      </template>
     </div>
   </BaseSettingCard>
 </template>

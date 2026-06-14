@@ -46,6 +46,12 @@ class UpdateCommand extends Command
     {
         set_time_limit(3600); // 1 hour
 
+        if (config('invoiceshelf.containerized')) {
+            $this->error('The in-app updater is disabled in containerized installs. Upgrade with `docker compose pull`.');
+
+            return;
+        }
+
         $this->installed = $this->getInstalledVersion();
         $this->response = $this->getLatestVersionResponse();
         $this->version = ($this->response) ? $this->response->version : false;

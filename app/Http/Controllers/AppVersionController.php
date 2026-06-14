@@ -27,6 +27,7 @@ class AppVersionController extends Controller
         return response()->json([
             'version' => $version,
             'channel' => $channel,
+            'containerized' => (bool) config('invoiceshelf.containerized'),
         ]);
     }
 }

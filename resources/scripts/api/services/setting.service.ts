@@ -102,7 +102,11 @@ export const settingService = {
   },
 
   // App Version
-  async getAppVersion(): Promise<{ version: string; channel: string }> {
+  async getAppVersion(): Promise<{
+    version: string
+    channel: string
+    containerized: boolean
+  }> {
     const { data } = await client.get(API.APP_VERSION)
     return data
   },
