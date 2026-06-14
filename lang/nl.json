@@ -26,6 +26,7 @@
     "copy_pdf_url": "Kopieer PDF-URL",
     "download_pdf": "PDF downloaden",
     "save": "Opslaan",
+    "skip": "Skip",
     "create": "Maak",
     "cancel": "Annuleren",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "Update mislukt",
       "update_failed_text": "Sorry! Je update is mislukt op: {step} step ",
       "update_warning": "Alle applicatiebestanden en de standaard sjabloonbestanden worden overschreven wanneer u de applicatie aan de hand van dit hulpprogramma bijwerkt. Maak een reservekopie van uw sjabloonbestanden en databank voordat u verder gaat.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "Backup | Backups",
