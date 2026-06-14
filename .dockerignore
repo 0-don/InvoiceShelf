@@ -8,6 +8,9 @@ docker/
 
 node_modules/
 
+# Vite output is rebuilt in the image's static_builder stage; never ship a stale host build
+public/build/
+
 database/*.sqlite
 storage/app/*
 !storage/app/templates*

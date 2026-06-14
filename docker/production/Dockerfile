@@ -37,7 +37,10 @@ FROM base AS production
     # Revert back to www-data, non-root user
     USER www-data
 
-    # Copy application files
-    COPY --from=static_builder --chown=www-data:www-data /var/www/html/public /var/www/html/public
+    # Copy application files first, then overlay the freshly-built frontend assets
+    # LAST. public/build is gitignored, so it's absent in CI but may exist in a local
+    # working tree — copying it after `COPY .` guarantees the stale host build can
+    # never clobber the fresh one produced by static_builder.
     COPY --chown=www-data:www-data . /var/www/html
+    COPY --from=static_builder --chown=www-data:www-data /var/www/html/public/build /var/www/html/public/build
     RUN composer install --prefer-dist --no-dev --optimize-autoloader
