@@ -26,6 +26,7 @@
     "copy_pdf_url": "Αντιγραφή συνδέσμου PDF",
     "download_pdf": "Λήψη PDF",
     "save": "Αποθήκευση",
+    "skip": "Skip",
     "create": "Δημιουργία",
     "cancel": "Ακύρωση",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "Αποτυχία ενημέρωσης",
       "update_failed_text": "Συγνώμη! Η ενημέρωσή σας απέτυχε σε: {step} βήμα",
       "update_warning": "Όλα τα αρχεία εφαρμογών και τα προεπιλεγμένα αρχεία προτύπων θα αντικατασταθούν όταν ενημερώνετε την εφαρμογή χρησιμοποιώντας αυτό το βοηθητικό πρόγραμμα. Παρακαλώ πάρτε ένα αντίγραφο ασφαλείας των προτύπων και της βάσης δεδομένων σας πριν από την ενημέρωση.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "Αντίγραφο Ασφαλείας \"Αντίγραφα Ασφαλείας",
