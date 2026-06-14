@@ -26,6 +26,7 @@
     "copy_pdf_url": "Sao chép Url PDF",
     "download_pdf": "Tải PDF",
     "save": "Tiết kiệm",
+    "skip": "Skip",
     "create": "Tạo nên",
     "cancel": "Huỷ bỏ",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "Cập nhật không thành công",
       "update_failed_text": "Lấy làm tiếc! Cập nhật của bạn không thành công vào: bước {step}",
       "update_warning": "Tất cả các tệp ứng dụng và tệp mẫu mặc định sẽ bị ghi đè khi bạn cập nhật ứng dụng bằng công cụ này. Vui lòng sao lưu các mẫu và cơ sở dữ liệu của bạn trước khi thực hiện cập nhật.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "Sao lưu | Sao lưu",
