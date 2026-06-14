@@ -26,6 +26,7 @@
     "copy_pdf_url": "Kopírovat adresu PDF",
     "download_pdf": "Stáhnout PDF",
     "save": "Uložit",
+    "skip": "Skip",
     "create": "Vytvořit",
     "cancel": "Zrušit",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "Aktualizace se nezdařila",
       "update_failed_text": "Omlouváme se! Aktualizace se nezdařila v {step}. kroku",
       "update_warning": "Všechny soubory aplikace a výchozí soubory šablon budou přepsány při aktualizaci aplikace pomocí tohoto nástroje. Před aktualizací si prosím zálohujte šablony a databázi.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "Záloha | Zálohy",
