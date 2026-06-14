@@ -52,7 +52,7 @@ class MemberRequest extends FormRequest
             $rules['email'] = [
                 'required',
                 new IdnEmail,
-                Rule::unique('users')->ignore($this->user),
+                Rule::unique('users')->ignore($this->member),
             ];
             $rules['password'] = [
                 'nullable',

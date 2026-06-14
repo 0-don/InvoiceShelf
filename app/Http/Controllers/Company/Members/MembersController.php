@@ -61,11 +61,11 @@ class MembersController extends Controller
      *
      * @return JsonResponse
      */
-    public function show(User $user)
+    public function show(User $member)
     {
-        $this->authorize('view', $user);
+        $this->authorize('view', $member);
 
-        return new UserResource($user);
+        return new UserResource($member);
     }
 
     /**
@@ -73,13 +73,13 @@ class MembersController extends Controller
      *
      * @return JsonResponse
      */
-    public function update(MemberRequest $request, User $user)
+    public function update(MemberRequest $request, User $member)
     {
-        $this->authorize('update', $user);
+        $this->authorize('update', $member);
 
-        $this->memberService->update($user, $request);
+        $this->memberService->update($member, $request);
 
-        return new UserResource($user);
+        return new UserResource($member);
     }
 
     /**
