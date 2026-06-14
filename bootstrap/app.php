@@ -8,6 +8,7 @@ use App\Http\Middleware\CustomerGuest;
 use App\Http\Middleware\CustomerPortalMiddleware;
 use App\Http\Middleware\CustomerRedirectIfAuthenticated;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnsureNotContainerized;
 use App\Http\Middleware\InstallationMiddleware;
 use App\Http\Middleware\PdfMiddleware;
 use App\Http\Middleware\PreventRequestForgery;
@@ -78,6 +79,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'customer-portal' => CustomerPortalMiddleware::class,
             'guest' => RedirectIfAuthenticated::class,
             'install' => InstallationMiddleware::class,
+            'not-containerized' => EnsureNotContainerized::class,
             'pdf-auth' => PdfMiddleware::class,
             'redirect-if-installed' => RedirectIfInstalled::class,
             'redirect-if-unauthenticated' => RedirectIfUnauthorized::class,

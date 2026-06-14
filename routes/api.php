@@ -427,20 +427,24 @@ Route::prefix('/v1')->group(function () {
 
         // Self Update
         // ----------------------------------
+        // Disabled inside the official Docker image — containers upgrade via
+        // `docker compose pull`, not the in-app updater (see EnsureNotContainerized).
 
-        Route::get('/check/update', CheckVersionController::class);
+        Route::middleware('not-containerized')->group(function () {
+            Route::get('/check/update', CheckVersionController::class);
 
-        Route::post('/update/download', DownloadUpdateController::class);
+            Route::post('/update/download', DownloadUpdateController::class);
 
-        Route::post('/update/unzip', UnzipUpdateController::class);
+            Route::post('/update/unzip', UnzipUpdateController::class);
 
-        Route::post('/update/copy', CopyFilesController::class);
+            Route::post('/update/copy', CopyFilesController::class);
 
-        Route::post('/update/delete', DeleteFilesController::class);
+            Route::post('/update/delete', DeleteFilesController::class);
 
-        Route::post('/update/migrate', MigrateUpdateController::class);
+            Route::post('/update/migrate', MigrateUpdateController::class);
 
-        Route::post('/update/finish', FinishUpdateController::class);
+            Route::post('/update/finish', FinishUpdateController::class);
+        });
 
         // Companies
         // -------------------------------------------------
