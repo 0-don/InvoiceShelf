@@ -794,11 +794,15 @@
                                         "channel": {
                                             "type": "string",
                                             "const": "stable"
+                                        },
+                                        "containerized": {
+                                            "type": "boolean"
                                         }
                                     },
                                     "required": [
                                         "version",
-                                        "channel"
+                                        "channel",
+                                        "containerized"
                                     ]
                                 }
                             }
@@ -17924,8 +17928,9 @@
                         "name": "member",
                         "in": "path",
                         "required": true,
+                        "description": "The member ID",
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     },
                     {
@@ -17960,6 +17965,9 @@
                     "403": {
                         "$ref": "#/components/responses/AuthorizationException"
                     },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
                     "401": {
                         "$ref": "#/components/responses/AuthenticationException"
                     }
@@ -17976,8 +17984,9 @@
                         "name": "member",
                         "in": "path",
                         "required": true,
+                        "description": "The member ID",
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     },
                     {
@@ -18021,6 +18030,9 @@
                     },
                     "403": {
                         "$ref": "#/components/responses/AuthorizationException"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
                     },
                     "401": {
                         "$ref": "#/components/responses/AuthenticationException"
