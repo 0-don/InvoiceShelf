@@ -26,6 +26,7 @@
     "copy_pdf_url": "PDF bağlantısını kopyala",
     "download_pdf": "PDF indir",
     "save": "Kaydet",
+    "skip": "Skip",
     "create": "Oluştur",
     "cancel": "İptal",
     "accept": "Accept",
@@ -1483,7 +1484,9 @@
       "update_failed": "Güncelleştirme Başarısız",
       "update_failed_text": "Üzgünüz! Güncelleştirmeniz :{step} adımında başarısız oldu",
       "update_warning": "Uygulamayı bu araçla güncellediğinizde tüm uygulama dosyaları ve varsayılan şablon dosyaları üzerine yazılacaktır. Güncellemeden önce şablonlarınızın ve veritabanınızın yedeğini almayı unutmayın.",
-      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again."
+      "requirements_not_met": "Update cannot continue because some system requirements are not met (including minimum PHP version). Please fix the failed requirements and try again.",
+      "containerized_title": "Running in Docker",
+      "containerized_message": "The in-app updater is disabled for Docker installs. To upgrade, pull the latest image and recreate the container:"
     },
     "backup": {
       "title": "Yedek | Yedekler",
