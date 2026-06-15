@@ -12,7 +12,6 @@ services:
       - proxy
     volumes:
       - invoice-shelf-mysqldata:/var/lib/mysql
-      - ~/duplicati-volume/source/invoice-shelf-db-mysqlbackup:/backups
     environment:
       - MARIADB_DATABASE=${DB_DATABASE}
       - MARIADB_USER=${DB_USERNAME}
@@ -30,7 +29,7 @@ services:
     networks:
       - proxy
     volumes:
-      - ~/duplicati-volume/source/invoice-shelf-db-mysqlbackup:/backups
+      - ~/duplicati-volume/source/invoice-shelf-db-mysqlbackup:/backup
     depends_on:
       - invoice-shelf-db
     environment:
