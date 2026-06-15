@@ -1,0 +1,89 @@
+networks:
+  proxy:
+    external: false
+    name: proxy
+
+services:
+  invoice-shelf-db:
+    container_name: invoice-shelf-db
+    image: mariadb:11
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - invoice-shelf-mysqldata:/var/lib/mysql
+      - ~/duplicati-volume/source/invoice-shelf-db-mysqlbackup:/backups
+    environment:
+      - MARIADB_DATABASE=${DB_DATABASE}
+      - MARIADB_USER=${DB_USERNAME}
+      - MARIADB_PASSWORD=${DB_PASSWORD}
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  invoice-shelf-dbbackup:
+    container_name: invoice-shelf-dbbackup
+    image: tiredofit/db-backup:latest
+    restart: always
+    networks:
+      - proxy
+    volumes:
+      - ~/duplicati-volume/source/invoice-shelf-db-mysqlbackup:/backups
+    depends_on:
+      - invoice-shelf-db
+    environment:
+      - DB_TYPE=mariadb
+      - DB_HOST=invoice-shelf-db
+      - DB_NAME=${DB_DATABASE}
+      - DB_USER=${DB_USERNAME}
+      - DB_PASS=${DB_PASSWORD}
+      - DB_DUMP_FREQ=360
+      - DB_DUMP_BEGIN=+0
+      - DB_CLEANUP_TIME=10080
+      - COMPRESSION=GZ
+      - CONTAINER_ENABLE_MONITORING=FALSE
+
+  invoice-shelf:
+    container_name: invoice-shelf
+    depends_on:
+      - invoice-shelf-db
+    networks:
+      - proxy
+    build:
+      context: ./
+      dockerfile: docker/production/Dockerfile
+    restart: always
+    volumes:
+      - invoice-shelf-storage:/var/www/html/storage
+    environment:
+      - APP_NAME=InvoiceShelf
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - APP_URL=${APP_URL}
+      - APP_KEY=${APP_KEY}
+      - DB_CONNECTION=mariadb
+      - DB_HOST=invoice-shelf-db
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - CACHE_STORE=file
+      - SESSION_DRIVER=file
+      - SESSION_LIFETIME=240
+      - SESSION_DOMAIN=invoice.coding-global.com
+      - SANCTUM_STATEFUL_DOMAINS=invoice.coding-global.com
+    labels:
+      - "autoheal=true"
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.invoice-shelf.rule=Host(`invoice.coding-global.com`)"
+      - "traefik.http.routers.invoice-shelf.entrypoints=websecure"
+      - "traefik.http.routers.invoice-shelf.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.invoice-shelf.service=invoice-shelf"
+      - "traefik.http.services.invoice-shelf.loadbalancer.server.port=8080"
+
+volumes:
+  invoice-shelf-mysqldata:
+  invoice-shelf-storage:

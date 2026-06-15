@@ -1,0 +1,48 @@
+name: Docker Prod
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create env file
+        run: |
+          echo APP_URL=${{ secrets.APP_URL }} > .env
+          echo APP_KEY=${{ secrets.APP_KEY }} >> .env
+          echo DB_DATABASE=${{ secrets.DB_DATABASE }} >> .env
+          echo DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
+          echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo DB_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }} >> .env
+
+      - name: Remove conflicting unmanaged containers
+        run: docker rm -f invoice-shelf invoice-shelf-db invoice-shelf-dbbackup || true
+
+      - name: Docker run
+        run: docker compose up -d --force-recreate --build
+
+      - name: Wait for site to be healthy
+        run: |
+          for i in {1..30}; do
+            if curl -fsS "${{ secrets.APP_URL }}/login" > /dev/null; then
+              echo "Site is up"
+              exit 0
+            fi
+            echo "Waiting for site... ($i/30)"
+            sleep 5
+          done
+          echo "Site did not come up in time"
+          exit 1
+
+      - name: remove unused images, containers, volumes, and networks
+        run: docker image prune -a -f --filter "until=24h" && docker container prune -f --filter "until=24h" && docker volume prune -f && docker network prune -f --filter "until=24h"
